@@ -35,6 +35,21 @@ class stock(models.Model):
 
 class commande(models.Model): 
     id = models.AutoField(primary_key=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     prix_total = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     client = models.CharField(max_length=63)
+
+class ProduitCommande(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    produit = models.ForeignKey(produit, on_delete=models.PROTECT)
+    commande = models.ForeignKey(commande, on_delete=models.CASCADE)
+    quantite = models.FloatField()
+    prix = models.FloatField()
+
+class Paiement(models.Model):
+    id = models.AutoField(primary_key=True)
+    montant = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    commande = models.ForeignKey(commande, on_delete=models.CASCADE)
