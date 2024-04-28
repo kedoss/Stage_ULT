@@ -20,16 +20,16 @@ class produit(models.Model):
     #category = models.ForeignKey(category, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.nom} igurishwa {self.prix_vente}"
+        return f"{self.nom} ugurishwa {self.prix_vente}"
     
 class stock(models.Model):
     id = models.AutoField(primary_key=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, editable=False)
     produit = models.ForeignKey(produit, on_delete = models.CASCADE)
     quantite_initiale = models.FloatField(default=0)
     quantite_actuelle = models.FloatField(editable=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    delais_expiration = models.PositiveBigIntegerField()
+    delais_expiration = models.PositiveBigIntegerField(null=True, blank=True)
     prix_achat = models.FloatField()
 
     def __str__(self) -> str:
@@ -37,14 +37,14 @@ class stock(models.Model):
 
 class commande(models.Model): 
     id = models.AutoField(primary_key=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, editable=False)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)#editable=True
     prix_total = models.FloatField(editable=False, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     client = models.CharField(max_length=63, null=True)
-    done = models.BooleanField(default=False, editable=False)
+    done = models.BooleanField(default=False, editable=False)#editable=True
 
     def __str__(self) -> str:
-        return f"Commande de {self.created_by} valant {self.prix_total}"
+        return f"Commande de {self.client} valant {self.prix_total}"
 
 class ProduitCommande(models.Model):
     id = models.BigAutoField(primary_key=True)
